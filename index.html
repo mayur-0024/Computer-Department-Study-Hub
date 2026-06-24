@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#07101a">
+  <title>CD Study Hub</title>
+  <style>
+    :root{
+      --bg-dark:#07101a;
+      --neon-blue:#00d4ff;
+      --neon-purple:#b66cff;
+      --card-bg: rgba(255,255,255,0.04);
+      --glass: rgba(255,255,255,0.06);
+      --text:#e6eef8;
+    }
+
+    /* Reset + base */
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial}
+    html,body{height:100%;background:linear-gradient(180deg,#03060a 0%, #07101a 80%);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+
+    /* full-screen 3d background canvas */
+    #bgCanvas{position:fixed;inset:0;z-index:0;display:block;pointer-events:none}
+
+
+    /* layout container sits above background */
+    .page{position:relative;z-index:3;min-height:100vh;display:flex;flex-direction:column}
+
+    /* Header / nav like sketch */
+    nav{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;backdrop-filter:blur(6px);background:rgba(0,0,0,0.15);border-bottom:1px solid rgba(255,255,255,0.03);}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple));display:flex;align-items:center;justify-content:center;color:#021224;font-weight:800;box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+
+    /* neon divider - visible between nav and hero */
+    .divider{
+      width:100%;
+      height:4px;
+      background:linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+      opacity:0.9;
+      z-index:3;
+    }
+
+    /* Hero area - centered like sketch */
+    .hero{
+      width:100%;display:flex;justify-content:center;padding:36px 22px;flex:0 0 auto;
+    }
+    .hero-inner{
+      width:100%;max-width:980px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:14px;padding:30px;display:grid;grid-template-columns:1fr 420px;gap:20px;align-items:start;border:1px solid rgba(255,255,255,0.04);box-shadow:0 10px 50px rgba(0,0,0,0.6)
+    }
+
+    /* left column: welcome + icons + text lines (sketch style) */
+    .left{
+      padding-right:8px;
+    }
+    .title{font-size:26px;font-weight:700;margin-bottom:8px}
+    .subtitle{opacity:0.9;margin-bottom:18px}
+    .icons-row{display:flex;align-items:center;gap:18px;margin-bottom:16px}
+    .icon-card{width:80px;height:80px;border-radius:12px;background:var(--card-bg);display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.03)}
+    .sketch-lines{margin-top:8px;display:flex;flex-direction:column;gap:12px}
+    .line{height:12px;border-radius:10px;background:linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));width:100%}
+    .line.short{width:65%}
+    .line.mid{width:80%}
+    .line.small{height:10px;width:40%}
+
+    /* advantages / bottom area like sketch */
+    .advantages{margin-top:20px;display:flex;gap:12px}
+    .adv{flex:1;padding:14px;border-radius:10px;background:var(--glass);border:1px solid rgba(255,255,255,0.03);text-align:center;font-weight:700}
+
+    /* footer small */
+    footer{margin-top: 88px ;padding:16px 28px;color:rgba(230,238,248,0.6);font-size:13px;text-align: center;width: 100%;}
+
+
+        /* MAIN CONTENT */
+  .main{
+    text-align: center;
+  }
+  .link-card{
+  width:90%;
+  max-width:400px;
+  margin:20px auto;
+  padding:20px;
+  border-radius:80px;
+  background:var(--card-bg);
+  border:1px solid rgba(255,255,255,0.1);
+  box-shadow:0 0 18px rgba(0,0,0,0.4);
+  cursor:pointer;
+  }
+  .link-card a{
+    font-weight:1000;
+  }
+
+
+    /* responsive: mobile layout matches your sketch narrow column */
+    @media (max-width:980px){
+      .hero-inner{grid-template-columns:1fr;gap:18px}
+      .three-wrap{height:260px}
+      .title{font-size:22px}
+    }
+
+    /* Mobile: ensure nav stays visible & swipable */
+    @media (max-width:520px){
+      nav{padding:12px 14px}
+      .logo{width:45px;height:45px;border-radius: 10px;object-fit: cover;}
+      .three-wrap{height:220px}
+      .title{font-size:22px}
+      
+      /* ENABLE SWIPE NAV LINKS on mobile */
+      .nav-links{
+        display:flex !important;
+        gap:15px;
+        overflow-x:auto;
+        white-space:nowrap;
+        padding-bottom:6px;
+
+
+      }
+
+    }
+
+    /* ----- Center Hero Text + Search Bar ----- */
+.hero-center{
+  margin: 40px auto 20px auto;
+  text-align: center;
+  padding: 10px;
+  max-width: 720px;
+}
+
+.main-heading{
+  font-size: 42px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.main-subtitle{
+  font-size: 16px;
+  opacity: 0.8;
+  margin-bottom: 22px;
+}
+
+@media(max-width:520px){
+  .main-heading{
+    font-size: 30px;
+  }
+    
+  footer{margin-top: 133px;padding:16px 28px;color:rgba(230,238,248,0.6);font-size:13px;text-align: center;width: 100%;}
+
+}
+  </style>
+</head>
+<body>
+  <!-- 3D background canvas -->
+  <canvas id="bgCanvas"></canvas>
+  <div class="page">
+    <nav>
+      <div class="brand">
+        <div class="logo">CD</div>
+        <div style="font-weight:800">CD Study Hub</div>
+      </div>
+
+    </nav>
+
+    <!-- neon divider under nav -->
+    <div class="divider" aria-hidden="true"></div>
+
+    <!-- HERO CONTENT (CENTER TEXT + SEARCH BAR) -->
+<section class="hero-center">
+  <h1 class="main-heading">Computer Department</h1>
+  <h1 class="main-heading">Study Hub</h1>
+  <p class="main-subtitle">Search notes, guides, papers, and practicals in one place.</p>
+</section>
+
+  <div class="main">
+    <div id="first" class="link-card">
+      <a href="1styear.html">1st Year</a>
+    </div>
+
+    <div id="second" class="link-card">
+      <a href="2ndyear.html">2nd Year</a>
+    </div>
+
+    <div id="third" class="link-card">
+      <a href="3rdyear.html">3rd Year</a>
+    </div>
+  </div>
+
+    <footer>© CD Study Hub — Made for students.</footer>
+
+  <!-- Three.js + font/text helpers -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://threejs.org/examples/js/loaders/FontLoader.js"></script>
+  <script src="https://threejs.org/examples/js/geometries/TextGeometry.js"></script>
+
+  <script>
+    // ---------- 3D background with floating particles + 3D TEXT ("CD Study Hub") ----------
+    (function(){
+      const canvas = document.getElementById('bgCanvas');
+      const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.z = 8;
+
+      // lights (soft neon)
+      const amb = new THREE.AmbientLight(0xffffff, 0.55);
+      scene.add(amb);
+
+      const p1 = new THREE.PointLight(0x00d4ff, 1.1, 40);
+      p1.position.set(5, 3, 8);
+      scene.add(p1);
+
+      const p2 = new THREE.PointLight(0xb66cff, 0.9, 40);
+      p2.position.set(-6, -2, 6);
+      scene.add(p2);
+
+      // floating particle field
+      const particleCount = 380;
+      const positions = new Float32Array(particleCount * 3);
+      const sizes = new Float32Array(particleCount);
+      for (let i = 0; i < particleCount; i++) {
+        positions[i*3] = (Math.random() - 0.5) * 40;
+        positions[i*3 + 1] = (Math.random() - 0.5) * 14;
+        positions[i*3 + 2] = (Math.random() - 0.5) * 40;
+        sizes[i] = 0.03 + Math.random()*0.07;
+      }
+      const particlesGeo = new THREE.BufferGeometry();
+      particlesGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      particlesGeo.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
+
+      const particlesMat = new THREE.PointsMaterial({
+        size: 0.06,
+        color: 0x55e7ff,
+        transparent: true,
+        opacity: 0.85
+      });
+      const particles = new THREE.Points(particlesGeo, particlesMat);
+      scene.add(particles);
+
+      // subtle larger glow blobs (sprites)
+      function makeGlow(color, scale){
+        const spriteMap = new THREE.TextureLoader().load('data:image/svg+xml;utf8,' + encodeURIComponent(
+          '<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><defs><radialGradient id="g" cx="50%" cy="50%"><stop offset="0%" stop-color="'+color+'" stop-opacity="1"/><stop offset="100%" stop-color="'+color+'" stop-opacity="0"/></radialGradient></defs><rect width="128" height="128" fill="url(#g)"/></svg>'
+        ));
+        const mat = new THREE.SpriteMaterial({ map: spriteMap, color: 0xffffff, transparent: true, opacity: 0.12 });
+        const s = new THREE.Sprite(mat);
+        s.scale.set(scale, scale, 1);
+        return s;
+      }
+      const glow1 = makeGlow('#00d4ff', 14);
+      glow1.position.set(7, 6, -6); scene.add(glow1);
+      const glow2 = makeGlow('#b66cff', 11);
+      glow2.position.set(-8, -4, -4); scene.add(glow2);
+
+      let textRoot = new THREE.Group();
+      scene.add(textRoot);
+
+      // mouse parallax
+      let mx = 0, my = 0;
+      window.addEventListener('mousemove', (e) => {
+        const nx = (e.clientX / window.innerWidth) - 0.5;
+        const ny = (e.clientY / window.innerHeight) - 0.5;
+        mx = nx; my = ny;
+      });
+
+      function resize() {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      // animation loop
+      let t = 0;
+      function animate() {
+        t += 0.01;
+        requestAnimationFrame(animate);
+
+        // slow orbit of particle field
+        particles.rotation.y = t * 0.06;
+        particles.position.y = Math.sin(t * 0.4) * 0.3;
+
+        // gently rotate the 3D text root and parallax it
+        textRoot.rotation.y = Math.sin(t * 0.4) * 0.06 + mx * 0.25;
+        textRoot.position.x += (mx * 2 - textRoot.position.x) * 0.02;
+        textRoot.position.y += (-my * 1.2 - textRoot.position.y) * 0.02;
+
+        // move glow sprites slightly
+        glow1.position.x = 7 + Math.sin(t*0.7)*0.6;
+        glow1.position.y = 6 + Math.cos(t*0.5)*0.5;
+        glow2.position.x = -8 + Math.cos(t*0.9)*0.6;
+        glow2.position.y = -4 + Math.sin(t*0.6)*0.4;
+
+        // camera slight parallax
+        camera.position.x += (mx*2.5 - camera.position.x) * 0.02;
+        camera.position.y += (-my*1.2 - camera.position.y) * 0.02;
+        camera.lookAt(0,0,0);
+
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      // ensure canvas covers full screen style (hi-dpi)
+      function styleCanvas() {
+        canvas.style.position = 'fixed';
+        canvas.style.left = 0;
+        canvas.style.top = 0;
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+      }
+      styleCanvas();
+    })();
+  </script>
+</body>
+</html>
