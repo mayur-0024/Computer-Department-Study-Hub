@@ -163,6 +163,13 @@
       .nav-links::-webkit-scrollbar{display:none}
     }
 
+  #bgCanvas{
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  }
+
   @media(max-width:520px){
   .main-heading{
     font-size: 28px;
@@ -189,7 +196,6 @@
 
       <!-- 3D background canvas -->
   <canvas id="bgCanvas"></canvas>
-  <div class="grid"></div>
 
   <div class="page">
     <nav>
@@ -219,13 +225,13 @@
   <a href="2ndsem.html">2nd Semester</a>
 </div>
 
-    <!-- MAIN CONTENT -->
+  <!-- MAIN CONTENT -->
   <div class="main">
     <h1>1st Year</h1>
 
     <div id="first" class="link-card">
       <strong>1st Semester Syllabus Link</strong><br><br>
-      <a href= "https://drive.google.com/file/d/1yg39rOL7BjaTsTGXYPJjRWFMT9Qfjfb4/view?usp=drive_link">Click Here</a>
+      <a href= "viewer.html?file=1stsem.pdf">Click Here</a>
     </div>
 
     <div id="second" class="link-card">
@@ -372,6 +378,9 @@
       }
       styleCanvas();
     })();
+
+  canvas.style.pointerEvents = "none";
+
   </script>
 
 </body>

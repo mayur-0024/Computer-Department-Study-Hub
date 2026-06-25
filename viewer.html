@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CD Study Hub Viewer</title>
+<style>
+
+      :root{
+      --neon-blue:#00d4ff;
+      --neon-purple:#b66cff;
+    }
+
+      /* Header / nav like sketch */
+    nav{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;backdrop-filter:blur(6px);background:rgba(0,0,0,0.15);border-bottom:1px solid rgba(255,255,255,0.03);z-index:4}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple));display:flex;align-items:center;justify-content:center;color:#021224;font-weight:800;box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+
+        /* neon divider - visible between nav and hero */
+    .divider{
+      width:100%;
+      height:4px;
+      background:linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+      opacity:0.9;
+      z-index:3;
+    }
+
+    body{
+  margin:0;
+  background:#07101a;
+  color:white;
+  font-family:Arial;
+}
+
+.btn{
+  padding:10px 20px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(90deg,#00d4ff,#b66cff);
+  color:white;
+  cursor:pointer;
+}
+
+.viewer{
+  padding:20px;
+  display:flex;
+  justify-content:center;
+}
+
+iframe{
+  width:90%;
+  height:85vh;
+  border:none;
+  border-radius:16px;
+  box-shadow:
+  0 0 15px #00d4ff,
+  0 0 30px #b66cff;
+  background:white;
+}
+
+    /* responsive: mobile layout matches your sketch narrow column */
+    @media (max-width:980px){
+      .hero-inner{grid-template-columns:1fr;gap:18px}
+      .three-wrap{height:260px}
+      .title{font-size:22px}
+    }
+
+    /* Mobile: ensure nav stays visible & swipable */
+    @media (max-width:520px){
+      nav{padding:12px 14px}
+      .logo{width:45px;height:45px;border-radius: 10px;object-fit: cover;}
+      .three-wrap{height:220px;}
+      .title{font-size:22px}
+      
+@media(max-width:520px)
+  .main-heading{
+    font-size: 28px;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="brand">
+  <div class="logo">CD</div>
+  <div style="font-weight:800">CD Study Hub</div>
+  <button class="btn" onclick="history.back()">Back</button>
+</div>
+
+    <!-- neon divider under nav -->
+    <div class="divider" aria-hidden="true"></div>
+
+<div class="viewer">
+  <iframe id="pdfFrame"></iframe>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const file = params.get("file");
+
+document.getElementById("pdfFrame").src = file;
+</script>
+
+</body>
+</html>
